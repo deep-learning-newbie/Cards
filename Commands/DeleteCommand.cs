@@ -5,18 +5,26 @@ using Dapper;
 
 namespace Commands
 {
-    // TODO: REMOVE FROM RELATIONSHIP FIRST
     public class DeleteCommand
     {
         private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["SQLEXPRESS"].ConnectionString;
-        const string QUERY = @"DELETE FROM Cards WHERE Id = @Id";
+        const string DeleteResourceBlobQuery = @"DELETE FROM Blobs WHERE Id IN (SELECT BlobId FROM CardsResources WHERE CardId = @Id)";
+        const string DeleteCardResourceQuery = @"DELETE FROM CardsResources WHERE CardId = @Id";
+        const string DeleteCardQuery = @"DELETE FROM Cards WHERE Id = @Id";
 
         public async Task ExecuteAsync(int id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                await connection.ExecuteAsync(QUERY, new { Id = id });
+                using (var transaction = connection.BeginTransaction())
+                {
+                    await connection.ExecuteAsync(DeleteResourceBlobQuery, new { Id = id }, transaction: transaction);
+                    await connection.ExecuteAsync(DeleteCardResourceQuery, new { Id = id }, transaction: transaction);
+                    await connection.ExecuteAsync(DeleteCardQuery, new { Id = id }, transaction: transaction);
+
+                    transaction.Commit();
+                }
             }
         }
     }
