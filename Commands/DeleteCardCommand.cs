@@ -5,7 +5,7 @@ using Dapper;
 
 namespace Commands
 {
-    public class DeleteCommand
+    public class DeleteCardCommand
     {
         private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["SQLEXPRESS"].ConnectionString;
         const string DeleteResourceBlobQuery = @"DELETE FROM Blobs WHERE Id IN (SELECT BlobId FROM CardsResources WHERE CardId = @Id)";

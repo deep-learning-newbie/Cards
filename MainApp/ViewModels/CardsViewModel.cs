@@ -79,7 +79,7 @@ namespace MainApp.ViewModels
             if (SelectedItem == null)
                 return;
 
-            var deleteCommand = new DeleteCommand();
+            var deleteCommand = new DeleteCardCommand();
             await deleteCommand.ExecuteAsync(SelectedItem.Id);
         }
 
