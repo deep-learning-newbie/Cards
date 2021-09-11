@@ -9,7 +9,7 @@ namespace Models
     {
         #region attributes
         private string _title;
-        private ObservableCollection<ResourceBase> _resources;
+        private ObservableCollection<ResourceBase> _resources = new ObservableCollection<ResourceBase>();
         private bool _inEditMode;
         private List<Card> _childs;
         private bool _isSelected;
@@ -19,7 +19,7 @@ namespace Models
         public string Title { get => _title; set { if (string.IsNullOrWhiteSpace(value)) throw new System.ArgumentNullException(nameof(Title)); _title = value; OnPropertyChanged(); } }
         public bool InEditMode { get => _inEditMode; set { _inEditMode = value; OnPropertyChanged();  } }
         public List<Card> Childs { get => _childs; set { _childs = new List<Card>(); OnPropertyChanged();} }
-        public ObservableCollection<ResourceBase> Resources { get => _resources; set { _resources = value; OnPropertyChanged(); } }
+        public ObservableCollection<ResourceBase> Resources { get => _resources; }
 
         public bool IsSelected { get=>_isSelected; set { _isSelected = value; OnPropertyChanged(); } }
 

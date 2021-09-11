@@ -26,7 +26,7 @@ namespace MainApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CardsViewModel viewModel;
+        private CardsViewModel _viewModel;
 
         public MainWindow()
         {
@@ -34,15 +34,23 @@ namespace MainApp
 
             // MapperWrapper.Initialize();
 
-            Task.Run(InitViewModel).Wait();
-            this.DataContext = viewModel;
+            //Task.Run(InitViewModel).Wait();
+            InitViewModel();
+            this.DataContext = _viewModel;
         }
 
-        private async Task InitViewModel()
+        //private async Task InitViewModel()
+        //{
+        //    var cardsQuery = new CardsQuery();
+        //    var cards = await cardsQuery.ExecuteAsync();
+        //    _viewModel = new CardsViewModel(cards);
+        //}
+        private void InitViewModel()
         {
             var cardsQuery = new CardsQuery();
-            var cards = await cardsQuery.ExecuteAsync();
-            viewModel = new CardsViewModel(cards);
+            //var cards = await cardsQuery.ExecuteAsync();
+            var cards = new List<Card>();
+            _viewModel = new CardsViewModel(cards);
         }
 
         private async Task RefreshDataAsync()
@@ -52,23 +60,15 @@ namespace MainApp
             var cardsQuery = new CardsQuery();
             var cards = await cardsQuery.ExecuteAsync();
             //viewModel.Cards = new ListCollectionView(new ObservableCollection<Card>(cards));
-            Dispatcher.Invoke(new Action (() => globlaThis.DataContext = viewModel));
+            Dispatcher.Invoke(new Action (() => globlaThis.DataContext = _viewModel));
         }
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
 
-            var title = @"Card #{vm.Cards.Count}"; //CurrentItem
-            var card = new Card()
-            {
-                Id = vm.Cards.Count,
-                InEditMode = true,
-                Title = title,
-                Resources = new ObservableCollection<ResourceBase>(),
-                Childs = new List<Card>()
-            };
-            vm.Cards.AddNewItem(card);
+            vm.AddCard(null);
+            e.Handled = true;
         }
 
         private void MenuItem_Edit(object sender, RoutedEventArgs e)
@@ -78,7 +78,7 @@ namespace MainApp
                 return;
 
             var currentItem = viewModel.SelectedItem;
-
+            currentItem.InEditMode = true;
         }
 
         private void MenuItem_Delete(object sender, RoutedEventArgs e)
@@ -89,24 +89,31 @@ namespace MainApp
 
             Task.Run(viewModel.DeleteAsync).Wait();
             Task.Run(RefreshDataAsync).Wait();
+
+            if (DataContext is not CardsViewModel vm) return;
+
+            vm.RemoveCard(null);
+            e.Handled = true;
         }
 
         private void Remove_Resource_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
-            if (vm.Cards.CurrentItem is not Card card) return;
+            if (vm./*SelectedItem*/Cards.CurrentItem is not Card card) return;
             if (sender is not Button button) return;
             if (button.DataContext is not ResourceBase resource) return;
 
-            card.Resources.Remove(resource);
+            vm.RemoveResource(resource);
 
             e.Handled = true;
         }
         private void Add_Resource_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
+            if (vm./*SelectedItem*/Cards.CurrentItem is not Card card) return;
 
-            vm.SelectedItem?.Resources.Add(new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
+            var resource = new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
+            vm.AddResource(resource);
 
             e.Handled = true;
         }
