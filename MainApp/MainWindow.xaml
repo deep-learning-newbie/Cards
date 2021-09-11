@@ -52,7 +52,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="{Binding Title}" />
-                    <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" IsChecked="{Binding InEditMode}"/>
+                    <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" IsChecked="{Binding InEditMode, Mode=TwoWay}"/>
                     <Button Grid.Column="2" Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0">
                         <Image Width="16" Source="/Resources/Images/Add_16x.png" />
                     </Button>
@@ -121,12 +121,12 @@
                             </Grid.ColumnDefinitions>
 
                             <Image Grid.Column="0" Source="/Resources/Images/340719-200.png" Width="48" Height="48"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Description}" Margin="8, 0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                            <TextBox Grid.Column="1" Text="{Binding Description}" Margin="8, 0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="{Binding ElementName=editButton, Path=IsChecked}"/>
                         </Grid>
                     </GroupBox>
                 </DataTemplate>
                 <DataTemplate x:Key="TableResourceItemTemplate" DataType="{x:Type model:TableResource}">
-                    <GroupBox Grid.Row="1" >
+                    <GroupBox Grid.Row="1" MinWidth="300">
                         <GroupBox.Header>
                             <Grid >
                                 <Grid.ColumnDefinitions>
@@ -138,7 +138,14 @@
                             </Grid>
                         </GroupBox.Header>
                         <Grid>
-                            <ListView ItemsSource="{Binding Rows}"/>
+                            <ListView ItemsSource="{Binding Rows}" IsEnabled="{Binding ElementName=editButton, Path=IsChecked}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Step" DisplayMemberBinding="{Binding Column1}" Width="30"/>
+                                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Column2}"  Width="60"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
                         </Grid>
                     </GroupBox>
                 </DataTemplate>
@@ -146,11 +153,6 @@
             <e:Interaction.Behaviors>
                 <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
             </e:Interaction.Behaviors>
-            <!--<TreeView.ItemTemplate>
-            <DataTemplate>
-                <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-        </TreeView.ItemTemplate>-->
         </TreeView>
     </Grid>
 </Window>

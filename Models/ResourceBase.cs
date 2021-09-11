@@ -19,8 +19,13 @@ namespace Models
         public string Description { get; set; }
         public string Uri { get; set; }
     }
+    public class TableResourceItem
+    {
+        public string Column1 { get; set; }
+        public string Column2 { get; set; }
+    }
     public class TableResource : ResourceBase
     {
-        public IEnumerable<string> Rows { get; set; }
+        public IEnumerable<TableResourceItem> Rows { get; set; }
     }
 }

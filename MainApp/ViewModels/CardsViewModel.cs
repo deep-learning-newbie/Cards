@@ -65,8 +65,8 @@ namespace MainApp.ViewModels
                     Title = "Card 1.1",
                     Resources = new ObservableCollection<ResourceBase>()
                     {
-                        new TableResource() { Index=1,Rows = new List<string>(){"Item 1", "Item 2" , "Item 3"}},
-                        new TableResource() { Index=2,Rows = new List<string>(){ "Item 1", "Item 2" , "Item 3" }},
+                        new TableResource() { Index=1, Rows = new List<TableResourceItem>(){ new TableResourceItem(){Column1 ="Item 1", Column2 = "Item 2"},  new TableResourceItem(){Column1 ="Item 1", Column2 = "Item 2"}} },
+                        new TableResource() { Index=2, Rows = new List<TableResourceItem>(){ new TableResourceItem(){Column1 ="Item 1", Column2 = "Item 2"}, new TableResourceItem(){Column1 ="Item 1", Column2 = "Item 2"}} },
                         new ImageResource() { Index=3, Description = "some text", Uri = "340719-200.png" }
                     }
                 });
