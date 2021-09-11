@@ -60,7 +60,7 @@ namespace MainApp
             var cardsQuery = new CardsQuery();
             var cards = await cardsQuery.ExecuteAsync();
             //viewModel.Cards = new ListCollectionView(new ObservableCollection<Card>(cards));
-            Dispatcher.Invoke(new Action (() => globlaThis.DataContext = _viewModel));
+            Dispatcher.Invoke(new Action(() => globlaThis.DataContext = _viewModel));
         }
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
@@ -99,7 +99,7 @@ namespace MainApp
         private void Remove_Resource_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
-            if (vm./*SelectedItem*/Cards.CurrentItem is not Card card) return;
+            if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
             if (sender is not Button button) return;
             if (button.DataContext is not ResourceBase resource) return;
 
@@ -110,10 +110,28 @@ namespace MainApp
         private void Add_Resource_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
-            if (vm./*SelectedItem*/Cards.CurrentItem is not Card card) return;
+            if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
 
-            var resource = new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
-            vm.AddResource(resource);
+            var dialog = new ResourceSelectorDialog();
+            dialog.Owner = this;
+            bool? result = dialog.ShowDialog();
+            if (result == true)
+            {
+                ResourceBase resource = null;
+                switch (dialog.ResourceTypeTitle.ToLower())
+                {
+                    case "image":
+                        resource = new ImageResource() { Index = 3, Description = "some text", Uri = "340719-200.png" };
+                        break;
+                    case "table":
+                        resource = new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
+                        break;
+                    default:
+                        break;
+                }
+
+                vm.AddResource(resource);
+            }
 
             e.Handled = true;
         }
