@@ -10,6 +10,10 @@ namespace MainApp.ViewModels
 {
     public class CardsViewModel : ViewModelBase
     {
+        #region attributes
+        private Card _seletcedItem;
+        #endregion
+
         public CardsViewModel(List<Card> cards) : this()
         {
             //TODO: uncomment this line
@@ -75,7 +79,17 @@ namespace MainApp.ViewModels
         }
         #endregion
 
-        public Card SelectedItem { get; set; }
+        public Card SelectedItem
+        {
+            get => _seletcedItem; set
+            {
+                if (_seletcedItem != null)
+                    _seletcedItem.IsSelected = false;
+                _seletcedItem = value;
+                _seletcedItem.IsSelected = true;
+                OnPropertyChanged();
+            }
+        }
         public ICollectionView Cards { get; set; }
 
         public async Task DeleteAsync()

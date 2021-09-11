@@ -12,6 +12,7 @@ namespace Models
         private ObservableCollection<ResourceBase> _resources;
         private bool _inEditMode;
         private List<Card> _childs;
+        private bool _isSelected;
         #endregion
 
         public int Id { get; set; }
@@ -19,6 +20,8 @@ namespace Models
         public bool InEditMode { get => _inEditMode; set { _inEditMode = value; OnPropertyChanged();  } }
         public List<Card> Childs { get => _childs; set { _childs = new List<Card>(); OnPropertyChanged();} }
         public ObservableCollection<ResourceBase> Resources { get => _resources; set { _resources = value; OnPropertyChanged(); } }
+
+        public bool IsSelected { get=>_isSelected; set { _isSelected = value; OnPropertyChanged(); } }
 
         #region INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;

@@ -26,32 +26,46 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
-                <Grid x:Name="CardHeader" Background="Transparent" >
-                    <!--<ContextMenu>
-                        <MenuItem Header="Add"  Click="MenuItem_Add"></MenuItem>
-                        <MenuItem Header="Edit" Click="MenuItem_Edit"></MenuItem>
-                        <MenuItem Header="Delete" Click="MenuItem_Delete"></MenuItem>
-                    </ContextMenu>-->
                     <Grid.Style>
                         <Style TargetType="Grid">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding InEditMode}" Value="True">
-                                    <Setter Property="Background" Value="Gray"/>
+                                    <Setter Property="Background" Value="White"/>
                                 </DataTrigger>
-                            </Style.Triggers>
+                            <DataTrigger Binding="{Binding InEditMode}" Value="False">
+                                <Setter Property="Background" Value="LightGray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                </Grid>
 
-                <Grid Grid.Row="0">
+                <Grid Grid.Row="0" Background="LightGreen">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add"  Click="MenuItem_Add"/>
+                            <MenuItem Header="Edit" Click="MenuItem_Edit"/>
+                            <MenuItem Header="Delete" Click="MenuItem_Delete"/>
+                        </ContextMenu>
+                    </Grid.ContextMenu>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
 
-                    <TextBlock Text="{Binding Title}" />
+                    <TextBlock Text="{Binding Title}" Margin="3" VerticalAlignment="Center" Background="Transparent"/>
                     <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" IsChecked="{Binding InEditMode, Mode=TwoWay}"/>
                     <Button Grid.Column="2" Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0">
                         <Image Width="16" Source="/Resources/Images/Add_16x.png" />
@@ -59,7 +73,7 @@
                 </Grid>
 
                 <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" BorderThickness="0" Margin="5"/>
-
+                
                 <!--<CheckBox x:Name="chkIsReadOnly" Grid.Row="1" IsChecked="{Binding IsReadOnly, Mode=OneWay}" Height="20"
                               Content="{Binding Name}"
                               IsHitTestVisible="False"
@@ -87,15 +101,6 @@
     </Window.Resources>
     <Grid>
         <TreeView x:Name="treeViewCards" ItemsSource="{Binding Cards}" ItemTemplate="{StaticResource CardItemTemplate}">
-            <!--<TreeView.ContextMenu x:Uid="cxt">
-                <ContextMenu Name="ContextMenu">
-                    <MenuItem Name="Add" Header="Add" Click="MenuItem_Add"></MenuItem>
-                    <Separator/>
-                    <MenuItem Name="Edit" Header="Edit" Click="MenuItem_Edit"></MenuItem>
-                    <Separator/>
-                    <MenuItem Name="Delete" Header="Delete"  Click="MenuItem_Delete"></MenuItem>
-                </ContextMenu>
-            </TreeView.ContextMenu>-->
             <TreeView.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGreen" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -141,8 +146,8 @@
                             <ListView ItemsSource="{Binding Rows}" IsEnabled="{Binding ElementName=editButton, Path=IsChecked}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Step" DisplayMemberBinding="{Binding Column1}" Width="30"/>
-                                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Column2}"  Width="60"/>
+                                        <GridViewColumn Header="Column 1" DisplayMemberBinding="{Binding Column1}" Width="100"/>
+                                        <GridViewColumn Header="Column 2" DisplayMemberBinding="{Binding Column2}" Width="100"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
