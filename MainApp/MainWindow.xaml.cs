@@ -40,6 +40,9 @@ namespace MainApp
             //var cards = await cardsQuery.ExecuteAsync();
             var cards = new List<Card>();
             _viewModel = new CardsViewModel(cards);
+            if (DataContext is not CardsViewModel vm) return;
+
+            Dispatcher.Invoke(async ()=> await vm.Refresh());
         }
 
         private async Task RefreshDataAsync()

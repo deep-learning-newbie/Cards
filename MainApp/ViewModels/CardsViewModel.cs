@@ -150,6 +150,11 @@ namespace MainApp.ViewModels
             var deleteCardResourceCommand = new DeleteCardResourceCommand();
             await deleteCardResourceCommand.ExecuteAsync(resource.Index); // TODO: Need to pass resourceId
                                                                           /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
+            Refresh().ConfigureAwait(false);
+        }
+
+        public async Task Refresh()
+        {
             var cardsQuery = new CardsQuery();
             var cards = await cardsQuery.ExecuteAsync();
             Cards = CollectionViewSource.GetDefaultView(cards);
