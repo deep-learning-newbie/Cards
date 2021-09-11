@@ -3,20 +3,9 @@ using MainApp.ViewModels;
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using AutoMapper;
 // using MainApp.Helpers;
 
 namespace MainApp
@@ -51,6 +40,9 @@ namespace MainApp
             //var cards = await cardsQuery.ExecuteAsync();
             var cards = new List<Card>();
             _viewModel = new CardsViewModel(cards);
+            if (DataContext is not CardsViewModel vm) return;
+
+            Dispatcher.Invoke(async ()=> await vm.Refresh());
         }
 
         private async Task RefreshDataAsync()

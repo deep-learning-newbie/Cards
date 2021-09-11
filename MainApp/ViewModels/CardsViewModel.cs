@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System;
 using System.Threading;
+using Queries;
 
 namespace MainApp.ViewModels
 {
@@ -139,17 +140,24 @@ namespace MainApp.ViewModels
             if (SelectedItem is not Card card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));
 
-            if (_view is not ListCollectionView view) return;
+            //if (_view is not ListCollectionView view) return;
             //view.EditItem(card);
-            card.Resources.Remove(resource);
+            //card.Resources.Remove(resource);
             //view.CommitEdit();
+            //view.Refresh();
 
             /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
             var deleteCardResourceCommand = new DeleteCardResourceCommand();
             await deleteCardResourceCommand.ExecuteAsync(resource.Index); // TODO: Need to pass resourceId
-            /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
+                                                                          /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
+            Refresh().ConfigureAwait(false);
+        }
 
-            view.Refresh();
+        public async Task Refresh()
+        {
+            var cardsQuery = new CardsQuery();
+            var cards = await cardsQuery.ExecuteAsync();
+            Cards = CollectionViewSource.GetDefaultView(cards);
         }
     }
 }
