@@ -10,7 +10,7 @@ namespace Queries
 {
     public sealed class CardsQuery
     {
-        private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["SQLEXPRESS"].ConnectionString;
+        private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["CardsDBConnectionString"].ConnectionString;
 
         const string QUERY = @"SELECT 
 	                             C.Id AS CardID,
@@ -52,7 +52,7 @@ namespace Queries
                         { 
                             Id = item.CardID, 
                             Title = item.Name,
-                            InEditMode = item.IsReadOnly 
+                            InEditMode = item.IsReadOnly // TODO: What for we use this property?
                         });
                 }
             }

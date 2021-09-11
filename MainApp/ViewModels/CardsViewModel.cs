@@ -79,8 +79,10 @@ namespace MainApp.ViewModels
             if (SelectedItem == null)
                 return;
 
+            /////// DB CALL IN ORDER TO DELETE CARD ////////
             var deleteCommand = new DeleteCardCommand();
             await deleteCommand.ExecuteAsync(SelectedItem.Id);
+            /////// DB CALL IN ORDER TO DELETE CARD ////////
         }
 
         public void AddCard(Card card) 
@@ -105,12 +107,17 @@ namespace MainApp.ViewModels
             if (_view is not ListCollectionView view) return;
             view.Refresh();
         }
-        public void RemoveCard(Card card) 
+        public async Task RemoveCard(Card card) 
         {
             if (Cards.CurrentItem is not Card card1) return;
 
             _entities.Remove(card1);
 
+            /////// DB CALL IN ORDER TO DELETE CARD ////////
+            var deleteCommand = new DeleteCardCommand();
+            await deleteCommand.ExecuteAsync(SelectedItem.Id);
+            /////// DB CALL IN ORDER TO DELETE CARD ////////
+            
             if (_view is not ListCollectionView view) return;
             view.Refresh();
         }
@@ -126,7 +133,7 @@ namespace MainApp.ViewModels
             //view.CommitEdit();
             view.Refresh();
         }
-        public void RemoveResource(ResourceBase resource)
+        public async Task RemoveResource(ResourceBase resource)
         {
             //if (Cards.CurrentItem is not Card card) return;
             if (SelectedItem is not Card card) return;
@@ -136,6 +143,12 @@ namespace MainApp.ViewModels
             //view.EditItem(card);
             card.Resources.Remove(resource);
             //view.CommitEdit();
+
+            /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
+            var deleteCardResourceCommand = new DeleteCardResourceCommand();
+            await deleteCardResourceCommand.ExecuteAsync(resource.Index); // TODO: Need to pass resourceId
+            /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
+
             view.Refresh();
         }
     }

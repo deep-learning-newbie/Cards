@@ -55,12 +55,12 @@ namespace MainApp
 
         private async Task RefreshDataAsync()
         {
-            var globlaThis = this;
+            var globalThis = this;
 
             var cardsQuery = new CardsQuery();
             var cards = await cardsQuery.ExecuteAsync();
             //viewModel.Cards = new ListCollectionView(new ObservableCollection<Card>(cards));
-            Dispatcher.Invoke(new Action(() => globlaThis.DataContext = _viewModel));
+            Dispatcher.Invoke(new Action(() => globalThis.DataContext = _viewModel));
         }
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
@@ -92,7 +92,7 @@ namespace MainApp
 
             if (DataContext is not CardsViewModel vm) return;
 
-            vm.RemoveCard(null);
+            Task.Run(() => vm.RemoveCard(viewModel.SelectedItem));
             e.Handled = true;
         }
 
@@ -103,7 +103,7 @@ namespace MainApp
             if (sender is not Button button) return;
             if (button.DataContext is not ResourceBase resource) return;
 
-            vm.RemoveResource(resource);
+            Task.Run(() => vm.RemoveResource(resource)).Wait();
 
             e.Handled = true;
         }

@@ -88,7 +88,7 @@
                     <CheckBox.Style>
                         <Style TargetType="CheckBox">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                                <DataTrigger Binding="{Binding InEditMode}" Value="True">
                                     <Setter Property="Background" Value="Gray"/>
                                 </DataTrigger>
                             </Style.Triggers>
