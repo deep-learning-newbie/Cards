@@ -31,6 +31,7 @@ CREATE TABLE [dbo].[CardsResources](
 	[Title2] [nvarchar](50) NULL,
 	[CardId] [int] NOT NULL,
 	[BlobId] [int] NOT NULL,
+	[ResourceType] [int] NOT NULL,
  CONSTRAINT [PK_CardsResources] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

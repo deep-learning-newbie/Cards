@@ -4,8 +4,8 @@ namespace Models
 {
     public enum ResourceType
     {
-        Picture=0,
-        Table =1
+        Picture = 0,
+        Table = 1
     }
 
     public abstract class ResourceBase
