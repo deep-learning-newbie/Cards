@@ -57,6 +57,18 @@ namespace MainApp
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
         {
+            if (DataContext is not CardsViewModel vm) return;
+
+            var title = @"Card #{vm.Cards.Count}"; //CurrentItem
+            var card = new Card()
+            {
+                Id = vm.Cards.Count,
+                InEditMode = true,
+                Title = title,
+                Resources = new ObservableCollection<ResourceBase>(),
+                Childs = new List<Card>()
+            };
+            vm.Cards.AddNewItem(card);
         }
 
         private void MenuItem_Edit(object sender, RoutedEventArgs e)
@@ -77,6 +89,26 @@ namespace MainApp
 
             Task.Run(viewModel.DeleteAsync).Wait();
             Task.Run(RefreshDataAsync).Wait();
+        }
+
+        private void Remove_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not CardsViewModel vm) return;
+            if (vm.Cards.CurrentItem is not Card card) return;
+            if (sender is not Button button) return;
+            if (button.DataContext is not ResourceBase resource) return;
+
+            card.Resources.Remove(resource);
+
+            e.Handled = true;
+        }
+        private void Add_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not CardsViewModel vm) return;
+
+            vm.SelectedItem?.Resources.Add(new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
+
+            e.Handled = true;
         }
     }
 }

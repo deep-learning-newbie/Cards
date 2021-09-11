@@ -67,7 +67,7 @@
 
                     <TextBlock Text="{Binding Title}" Margin="3" VerticalAlignment="Center" Background="Transparent"/>
                     <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" IsChecked="{Binding InEditMode, Mode=TwoWay}"/>
-                    <Button Grid.Column="2" Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0">
+                    <Button Grid.Column="2" Background="Transparent" BorderThickness="0" Margin="8, 0, 0, 0" Click="Add_Resource_Click">
                         <Image Width="16" Source="/Resources/Images/Add_16x.png" />
                     </Button>
                 </Grid>
@@ -116,7 +116,9 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" BorderThickness="0" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" 
+                                        BorderThickness="0" VerticalAlignment="Center"
+                                        Click="Remove_Resource_Click"/>
                             </Grid>
                         </GroupBox.Header>
                         <Grid>
@@ -139,7 +141,9 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" BorderThickness="0" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" 
+                                        BorderThickness="0" VerticalAlignment="Center"
+                                        Click="Remove_Resource_Click"/>
                             </Grid>
                         </GroupBox.Header>
                         <Grid>

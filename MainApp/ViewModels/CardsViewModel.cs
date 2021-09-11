@@ -90,7 +90,7 @@ namespace MainApp.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ICollectionView Cards { get; set; }
+        public ListCollectionView Cards { get; set; }
 
         public async Task DeleteAsync()
         {
@@ -100,5 +100,7 @@ namespace MainApp.ViewModels
             var deleteCommand = new DeleteCommand();
             await deleteCommand.ExecuteAsync(SelectedItem.Id);
         }
+
+
     }
 }
