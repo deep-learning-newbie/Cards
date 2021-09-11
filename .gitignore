@@ -13,3 +13,4 @@ obj/
 
 # End of h
 *.suo
+/.vs/TestSolution/DesignTimeBuild/.dtbcache.v2
