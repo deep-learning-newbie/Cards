@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Configuration;
 
 namespace Queries
 {
     public sealed class CardsQuery
     {
-        //string _connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=CardsDB;Integrated Security=True;";
-        //string _connectionString = @"Data Source=(localdb)\CardsDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        //string _connectionString = @"Data Source=(localdb)\CardsDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        string _connectionString = @"Data Source = (localdb)\CardsDB;Initial Catalog = CardsDB; Integrated Security = True";
-        //string _connectionString = @"Data Source=np:\\.\pipe\LOCALDB#049EA2DE\tsql\query;Initial Catalog=CardsDB;Integrated Security=True";
+        private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["SQLEXPRESS"].ConnectionString;
 
         const string QUERY = @"SELECT 
 	                             C.Id AS CardID,
@@ -36,7 +33,7 @@ namespace Queries
         public async Task<List<Card>> ExecuteAsync()
         {
             List<Card> result = new List<Card>();
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
                 var cardsRelationships = await connection.QueryAsync<CardsRelationship>(QUERY);
