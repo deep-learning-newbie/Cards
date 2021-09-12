@@ -1,8 +1,9 @@
 ﻿using MainApp.ViewModels;
+using Microsoft.Xaml.Behaviors;
 using Models;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
+
 
 namespace MainApp.Behaviours
 {

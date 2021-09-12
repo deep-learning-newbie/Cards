@@ -28,7 +28,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                    <Grid.Style>
+                <Grid.Style>
                         <Style TargetType="Grid">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding InEditMode}" Value="True">
@@ -58,7 +58,7 @@
                         <Style TargetType="Grid">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                    <Setter Property="Background" Value="LightGray"/>
+                                    <Setter Property="Background" Value="LightGreen"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="False">
                                     <Setter Property="Background" Value="LightGray"/>
@@ -95,7 +95,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" 
+                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent"  IsEnabled="{Binding ElementName=editButton, Path=IsChecked}"
                                         BorderThickness="0" VerticalAlignment="Center"
                                         Click="Remove_Resource_Click"/>
                             </Grid>
@@ -120,7 +120,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" 
+                                <Button Grid.Column="1" Content="[удалить]" Background="Transparent" IsEnabled="{Binding ElementName=editButton, Path=IsChecked}"
                                         BorderThickness="0" VerticalAlignment="Center"
                                         Click="Remove_Resource_Click"/>
                             </Grid>
@@ -138,9 +138,9 @@
                     </GroupBox>
                 </DataTemplate>
             </TreeView.Resources>
-            <e:Interaction.Behaviors>
+            <i:Interaction.Behaviors>
                 <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
-            </e:Interaction.Behaviors>
+            </i:Interaction.Behaviors>
         </TreeView>
     </Grid>
 </Window>

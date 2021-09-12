@@ -15,7 +15,7 @@ namespace MainApp.ViewModels
     {
         #region attributes
         private Card _seletcedItem;
-        private ObservableCollection<Card> _entities;
+        //private ObservableCollection<Card> _entities;
         private ICollectionView _view;
         #endregion
 
@@ -123,13 +123,14 @@ namespace MainApp.ViewModels
 
             var deleteCardResourceCommand = new DeleteCardResourceCommand();
             await deleteCardResourceCommand.ExecuteAsync(resource.Id);
-            
+
             await RefreshAsync().ConfigureAwait(false);
         }
 
         public async Task RefreshAsync()
         {
             var cardsQuery = new CardsQuery();
+
             var cards = await cardsQuery.ExecuteAsync();
             Cards = CollectionViewSource.GetDefaultView(cards);
         }
