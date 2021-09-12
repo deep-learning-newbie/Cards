@@ -85,5 +85,12 @@ namespace MainApp
 
             e.Handled = true;
         }
+        private void OnEdditUnchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is not CheckBox checkBox) return;
+            if (checkBox.DataContext is not Card card) return;
+
+
+        }
     }
 }
