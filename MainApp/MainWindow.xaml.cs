@@ -20,7 +20,7 @@ namespace MainApp
         public MainWindow()
         {
             InitializeComponent();
-            
+
             InitViewModel();
             this.DataContext = _viewModel;
         }
@@ -30,7 +30,7 @@ namespace MainApp
             var cards = new List<Card>();
             _viewModel = new CardsViewModel();
 
-            Dispatcher.Invoke(async ()=> await _viewModel.RefreshAsync().ConfigureAwait(false));
+            Dispatcher.Invoke(async () => await _viewModel.RefreshAsync().ConfigureAwait(false));
         }
 
         private async Task RefreshDataAsync()
@@ -52,15 +52,15 @@ namespace MainApp
             e.Handled = true;
         }
 
-        private void MenuItem_Edit(object sender, RoutedEventArgs e)
-        {
-            var viewModel = (sender as MenuItem).DataContext as CardsViewModel;
-            if (viewModel == null || viewModel.SelectedItem == null || viewModel.SelectedItem.InEditMode)
-                return;
+        //private void MenuItem_Edit(object sender, RoutedEventArgs e)
+        //{
+        //    var viewModel = (sender as MenuItem).DataContext as CardsViewModel;
+        //    if (viewModel == null || viewModel.SelectedItem == null || viewModel.SelectedItem.InEditMode)
+        //        return;
 
-            var currentItem = viewModel.SelectedItem;
-            currentItem.InEditMode = true;
-        }
+        //    var currentItem = viewModel.SelectedItem;
+        //    currentItem.InEditMode = true;
+        //}
 
         private void MenuItem_Delete(object sender, RoutedEventArgs e)
         {

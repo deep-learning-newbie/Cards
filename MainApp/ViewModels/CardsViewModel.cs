@@ -68,7 +68,9 @@ namespace MainApp.ViewModels
                 if (_seletcedItem != null)
                     _seletcedItem.IsSelected = false;
                 _seletcedItem = value;
-                _seletcedItem.IsSelected = true;
+                if (_seletcedItem != null)
+                    _seletcedItem.IsSelected = true;
+
                 OnPropertyChanged();
             }
         }
