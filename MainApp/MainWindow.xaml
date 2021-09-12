@@ -16,9 +16,7 @@
         DataContext="CardsViewModel"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:CardsViewModel}"
         >
-
     <Window.Resources>
-
         <local:ResourceTemplateSelector x:Key="ResourceTemplateSelector"/>
         <converters:ByteToImageConverter x:Key="byteToImageConverter" />
 
@@ -50,7 +48,6 @@
                     <Grid.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Add"  Click="MenuItem_Add"/>
-                            <MenuItem Header="Edit" Click="MenuItem_Edit"/>
                             <MenuItem Header="Delete" Click="MenuItem_Delete"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
