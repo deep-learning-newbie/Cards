@@ -15,7 +15,7 @@ namespace MainApp.ViewModels
     {
         #region attributes
         private Card _seletcedItem;
-        private ObservableCollection<Card> _entities;
+        //private ObservableCollection<Card> _entities;
         private ICollectionView _view;
         #endregion
 
@@ -85,7 +85,7 @@ namespace MainApp.ViewModels
             await RefreshAsync().ConfigureAwait(false);
         }
 
-        public async Task AddCard(int parentCardId, Card card) 
+        public async Task AddCard(int parentCardId, Card card)
         {
             card = card ?? throw new ArgumentNullException(nameof(card));
 
@@ -94,7 +94,7 @@ namespace MainApp.ViewModels
 
             await RefreshAsync().ConfigureAwait(false);
         }
-        public async Task RemoveCard(Card card) 
+        public async Task RemoveCard(Card card)
         {
             if (Cards.CurrentItem is not Card) return;
 
@@ -104,7 +104,7 @@ namespace MainApp.ViewModels
             await RefreshAsync().ConfigureAwait(false);
         }
 
-        public void AddResource(ResourceBase resource) 
+        public void AddResource(ResourceBase resource)
         {
             if (SelectedItem is not Card card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));
@@ -121,13 +121,14 @@ namespace MainApp.ViewModels
 
             var deleteCardResourceCommand = new DeleteCardResourceCommand();
             await deleteCardResourceCommand.ExecuteAsync(resource.Id);
-            
+
             await RefreshAsync().ConfigureAwait(false);
         }
 
         public async Task RefreshAsync()
         {
             var cardsQuery = new CardsQuery();
+
             var cards = await cardsQuery.ExecuteAsync();
             Cards = CollectionViewSource.GetDefaultView(cards);
         }
