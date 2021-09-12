@@ -8,8 +8,6 @@ namespace MainApp
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            //return base.SelectTemplate(item, container);
-
             FrameworkElement element = container as FrameworkElement;
             if (element != null && item != null && item is ImageResource)
             {

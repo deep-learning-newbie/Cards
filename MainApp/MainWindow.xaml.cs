@@ -74,7 +74,7 @@ namespace MainApp
                         resource = new ImageResource() { Index = 3, Description = "some text" };
                         break;
                     case "table":
-                        resource = new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
+                        resource = new TableResource() { ResourceType = ResourceType.Table, Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
                         break;
                     default:
                         break;
