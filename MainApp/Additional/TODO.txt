@@ -1,3 +1,0 @@
-﻿- CardsQuery line 55
-- Need to get data from DB already
-- decide what to do with windows interactivity

@@ -13,15 +13,14 @@ SELECT * FROM ImageCardsResources
 SELECT * FROM TableCardsResources
 SELECT * FROM Blobs
 
---Step 1
 INSERT INTO Blobs(Data) SELECT Data
-FROM OPENROWSET(BULK N'C:\Temp\t1\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
+FROM OPENROWSET(BULK N'C:\dev\CardsVova2\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
 
 INSERT INTO Blobs(Data) SELECT Data
-FROM OPENROWSET(BULK N'C:\Temp\t1\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
+FROM OPENROWSET(BULK N'C:\dev\CardsVova2\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
 
 INSERT INTO Blobs(Data) SELECT Data
-FROM OPENROWSET(BULK N'C:\Temp\t1\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
+FROM OPENROWSET(BULK N'C:\dev\CardsVova2\Cards\MainApp\Resources\Images\340719-200.png', SINGLE_BLOB) AS ImageSource(Data);
 
 INSERT INTO Cards (Title) VALUES('Card 1')
 INSERT INTO Cards (Title) VALUES('Card 2')

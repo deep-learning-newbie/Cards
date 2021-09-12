@@ -71,7 +71,7 @@ namespace MainApp
                 switch (dialog.ResourceTypeTitle.ToLower())
                 {
                     case "image":
-                        resource = new ImageResource() { Index = 3, Description = "some text", Uri = "340719-200.png" };
+                        resource = new ImageResource() { Index = 3, Description = "some text" };
                         break;
                     case "table":
                         resource = new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } };
