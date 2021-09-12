@@ -1,5 +1,0 @@
-﻿- Rework MenuItem_Delete so we have to calls for remove and delete
-- Rework Resource model in order to have resource id and work with it in command instead of index
-- CardsQuery line 55
-- Need to get data from DB already
-- decide what to do with windows interactivity

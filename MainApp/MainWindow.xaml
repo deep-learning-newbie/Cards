@@ -7,7 +7,6 @@
         xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:MainApp.Behaviours"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:prism="http://prismlibrary.com/"
         xmlns:vm="clr-namespace:MainApp.ViewModels"
         xmlns:converters="clr-namespace:MainApp.Converters"
         xmlns:model="clr-namespace:Models;assembly=Models"
@@ -16,9 +15,7 @@
         DataContext="CardsViewModel"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:CardsViewModel}"
         >
-
     <Window.Resources>
-
         <local:ResourceTemplateSelector x:Key="ResourceTemplateSelector"/>
         <converters:ByteToImageConverter x:Key="byteToImageConverter" />
         <Style x:Key="AddResourceButtonStyle" TargetType="Button">
