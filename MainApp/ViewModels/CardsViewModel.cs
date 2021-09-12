@@ -85,7 +85,7 @@ namespace MainApp.ViewModels
             await RefreshAsync().ConfigureAwait(false);
         }
 
-        public async Task AddCard(int parentCardId, Card card) 
+        public async Task AddCardAsync(int parentCardId, Card card) 
         {
             card = card ?? throw new ArgumentNullException(nameof(card));
 
@@ -94,7 +94,8 @@ namespace MainApp.ViewModels
 
             await RefreshAsync().ConfigureAwait(false);
         }
-        public async Task RemoveCard(Card card) 
+
+        public async Task RemoveCardAsync(Card card) 
         {
             if (Cards.CurrentItem is not Card) return;
 
@@ -104,17 +105,18 @@ namespace MainApp.ViewModels
             await RefreshAsync().ConfigureAwait(false);
         }
 
-        public void AddResource(ResourceBase resource) 
+        public async Task AddResourceAsync(ResourceBase resource) 
         {
             if (SelectedItem is not Card card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));
 
-            if (_view is not ListCollectionView view) return;
-            card.Resources.Add(resource);
-            view.Refresh();
+            var addResourceCommand = new AddCardResourceCommand();
+            await addResourceCommand.ExecuteAsync(card.Id, resource.ResourceType, "Item 1", "Item 2", "TEST BODY");
+
+            await RefreshAsync().ConfigureAwait(false);
         }
 
-        public async Task RemoveResource(ResourceBase resource)
+        public async Task RemoveResourceAsync(ResourceBase resource)
         {
             // if (SelectedItem is not Card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));

@@ -9,7 +9,7 @@ namespace Commands
     {
         private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["CardsDBConnectionString"].ConnectionString;
         
-        const string InsertCardQuery = @"INSERT INTO Cards (Title) VALUES (@Title); SELECT CAST(SCOPE_IDENTITY() as int)";
+        const string InsertCardQuery = @"INSERT INTO Cards (Title) VALUES (@Title)";
         const string GetLastCardIdQuery = @"SELECT MAX(Id) FROM Cards";
         const string InsertCardRelationshipQuery = @"INSERT INTO CardsRelationship(ParentId, ChildId) VALUES(@ParentId, @ChildId)";
 

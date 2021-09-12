@@ -48,7 +48,7 @@ namespace MainApp
             if (_viewModel.SelectedItem is not Card)
                 return;
 
-            Task.Run(() => _viewModel.AddCard(_viewModel.SelectedItem.Id, new Card { Title = "Test" }));
+            Task.Run(() => _viewModel.AddCardAsync(_viewModel.SelectedItem.Id, new Card { Title = "Test" }));
             e.Handled = true;
         }
 
@@ -76,7 +76,7 @@ namespace MainApp
 
             if (DataContext is not CardsViewModel vm) return;
 
-            Task.Run(() => vm.RemoveCard(_viewModel.SelectedItem));
+            Task.Run(() => vm.RemoveCardAsync(_viewModel.SelectedItem));
             e.Handled = true;
         }
 
@@ -87,7 +87,7 @@ namespace MainApp
             if (sender is not Button button) return;
             if (button.DataContext is not ResourceBase resource) return;
 
-            Task.Run(() => vm.RemoveResource(resource)).Wait();
+            Task.Run(() => vm.RemoveResourceAsync(resource)).Wait();
 
             e.Handled = true;
         }
@@ -115,7 +115,7 @@ namespace MainApp
                         break;
                 }
 
-                _viewModel.AddResource(resource);
+                Task.Run(() => _viewModel.AddResourceAsync(resource)).ConfigureAwait(false);
             }
 
             e.Handled = true;
