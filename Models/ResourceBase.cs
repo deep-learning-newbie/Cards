@@ -10,6 +10,7 @@ namespace Models
 
     public abstract class ResourceBase
     {
+        public int Id { get; set; }
         public ResourceType ResourceType { get; set; }
         public int Index { get; set; }
     }
@@ -17,6 +18,7 @@ namespace Models
     public class ImageResource : ResourceBase
     {
         public string Description { get; set; }
+        public byte[] Data { get; set; }
         public string Uri { get; set; }
     }
     public class TableResourceItem

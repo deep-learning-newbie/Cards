@@ -19,47 +19,47 @@ namespace MainApp.ViewModels
         private ICollectionView _view;
         #endregion
 
-        public CardsViewModel(List<Card> cards) : this()
+        public CardsViewModel(/*List<Card> cards*/) // : this()
         {
-            //TODO: uncomment this line
-            //Cards = new ListCollectionView(cards);
+            // TODO: uncomment this line
+            // Cards = new ListCollectionView(cards);
         }
 
-        #region for test purpose only 
-        public CardsViewModel()
-        {
-            _entities = new ObservableCollection<Card>();
-            var card2 = new Card()
-            {
-                Id = 2,
-                InEditMode = true,
-                Title = "Card 0",
-                Childs = new List<Card>()
-            };
-            card2.Resources.Add(new ImageResource() { Index = 1, Description = "some text", Uri = "Image1" });
-            var card21 = new Card()
-            {
-                Id = 21,
-                InEditMode = false,
-                Title = "Card 0.1",                
-            };
-            card21.Resources.Add(new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
-            card21.Resources.Add(new TableResource() { Index = 2, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
-            card21.Resources.Add(new ImageResource() { Index = 3, Description = "some text", Uri = "340719-200.png" });
+        //#region for test purpose only 
+        //public CardsViewModel()
+        //{
+        //    _entities = new ObservableCollection<Card>();
+        //    var card2 = new Card()
+        //    {
+        //        Id = 2,
+        //        InEditMode = true,
+        //        Title = "Card 0",
+        //        Childs = new List<Card>()
+        //    };
+        //    card2.Resources.Add(new ImageResource() { Index = 1, Description = "some text", Uri = "Image1" });
+        //    var card21 = new Card()
+        //    {
+        //        Id = 21,
+        //        InEditMode = false,
+        //        Title = "Card 0.1",                
+        //    };
+        //    card21.Resources.Add(new TableResource() { Index = 1, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
+        //    card21.Resources.Add(new TableResource() { Index = 2, Rows = new List<TableResourceItem>() { new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" }, new TableResourceItem() { Column1 = "Item 1", Column2 = "Item 2" } } });
+        //    card21.Resources.Add(new ImageResource() { Index = 3, Description = "some text", Uri = "340719-200.png" });
 
-            card2.Childs.Add(card21);
-            _entities.Add(card2);
+        //    card2.Childs.Add(card21);
+        //    _entities.Add(card2);
 
-            //foreach (var item in cards)
-            //{
-            //    Cards.Add(item);
-            //}
+        //    //foreach (var item in cards)
+        //    //{
+        //    //    Cards.Add(item);
+        //    //}
 
-            //_cardsView = new ListCollectionView(_cards);
-            //_view = CollectionViewSource.GetDefaultView(_entities);
-            Cards =  CollectionViewSource.GetDefaultView(_entities);
-        }
-        #endregion
+        //    //_cardsView = new ListCollectionView(_cards);
+        //    //_view = CollectionViewSource.GetDefaultView(_entities);
+        //    Cards =  CollectionViewSource.GetDefaultView(_entities);
+        //}
+        //#endregion
 
         public Card SelectedItem
         {
@@ -75,15 +75,14 @@ namespace MainApp.ViewModels
         public ICollectionView Cards { get => _view; set { _view = value; OnPropertyChanged(); } }
         //public ObservableCollection<Card> Cards { get; } = new ObservableCollection<Card>();
 
-        public async Task DeleteAsync()
+        public async Task DeleteAsync(Card card)
         {
-            if (SelectedItem == null)
-                return;
+            card = card ?? throw new ArgumentNullException(nameof(card));
 
-            /////// DB CALL IN ORDER TO DELETE CARD ////////
             var deleteCommand = new DeleteCardCommand();
-            await deleteCommand.ExecuteAsync(SelectedItem.Id);
-            /////// DB CALL IN ORDER TO DELETE CARD ////////
+            await deleteCommand.ExecuteAsync(card.Id);
+
+            await RefreshAsync().ConfigureAwait(false);
         }
 
         public void AddCard(Card card) 
@@ -110,18 +109,14 @@ namespace MainApp.ViewModels
         }
         public async Task RemoveCard(Card card) 
         {
-            if (Cards.CurrentItem is not Card card1) return;
+            if (Cards.CurrentItem is not Card) return;
 
-            _entities.Remove(card1);
-
-            /////// DB CALL IN ORDER TO DELETE CARD ////////
             var deleteCommand = new DeleteCardCommand();
-            await deleteCommand.ExecuteAsync(SelectedItem.Id);
-            /////// DB CALL IN ORDER TO DELETE CARD ////////
-            
-            if (_view is not ListCollectionView view) return;
-            view.Refresh();
+            await deleteCommand.ExecuteAsync(card.Id);
+
+            await RefreshAsync().ConfigureAwait(false);
         }
+
         public void AddResource(ResourceBase resource) 
         {
             //if (Cards.CurrentItem is not Card card) return;
@@ -134,26 +129,19 @@ namespace MainApp.ViewModels
             //view.CommitEdit();
             view.Refresh();
         }
+
         public async Task RemoveResource(ResourceBase resource)
         {
-            //if (Cards.CurrentItem is not Card card) return;
-            if (SelectedItem is not Card card) return;
+            // if (SelectedItem is not Card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));
 
-            //if (_view is not ListCollectionView view) return;
-            //view.EditItem(card);
-            //card.Resources.Remove(resource);
-            //view.CommitEdit();
-            //view.Refresh();
-
-            /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
             var deleteCardResourceCommand = new DeleteCardResourceCommand();
-            await deleteCardResourceCommand.ExecuteAsync(resource.Index); // TODO: Need to pass resourceId
-                                                                          /////// DB CALL IN ORDER TO DELETE RESOURCE ////////
-            Refresh().ConfigureAwait(false);
+            await deleteCardResourceCommand.ExecuteAsync(resource.Id);
+            
+            await RefreshAsync().ConfigureAwait(false);
         }
 
-        public async Task Refresh()
+        public async Task RefreshAsync()
         {
             var cardsQuery = new CardsQuery();
             var cards = await cardsQuery.ExecuteAsync();

@@ -20,29 +20,17 @@ namespace MainApp
         public MainWindow()
         {
             InitializeComponent();
-
-            // MapperWrapper.Initialize();
-
-            //Task.Run(InitViewModel).Wait();
+            
             InitViewModel();
             this.DataContext = _viewModel;
         }
 
-        //private async Task InitViewModel()
-        //{
-        //    var cardsQuery = new CardsQuery();
-        //    var cards = await cardsQuery.ExecuteAsync();
-        //    _viewModel = new CardsViewModel(cards);
-        //}
         private void InitViewModel()
         {
-            var cardsQuery = new CardsQuery();
-            //var cards = await cardsQuery.ExecuteAsync();
             var cards = new List<Card>();
-            _viewModel = new CardsViewModel(cards);
-            if (DataContext is not CardsViewModel vm) return;
+            _viewModel = new CardsViewModel();
 
-            Dispatcher.Invoke(async ()=> await vm.Refresh());
+            Dispatcher.Invoke(async ()=> await _viewModel.RefreshAsync().ConfigureAwait(false));
         }
 
         private async Task RefreshDataAsync()
@@ -75,23 +63,26 @@ namespace MainApp
 
         private void MenuItem_Delete(object sender, RoutedEventArgs e)
         {
-            var viewModel = (sender as MenuItem).DataContext as CardsViewModel;
-            if (viewModel == null || viewModel.SelectedItem == null)
+            //var viewModel = (sender as MenuItem).DataContext as CardsViewModel;
+            //if (viewModel == null || viewModel.SelectedItem == null)
+            //    return;
+
+            if (_viewModel.SelectedItem == null)
                 return;
 
-            Task.Run(viewModel.DeleteAsync).Wait();
+            Task.Run(() => _viewModel.DeleteAsync(_viewModel.SelectedItem)).Wait();
             Task.Run(RefreshDataAsync).Wait();
 
             if (DataContext is not CardsViewModel vm) return;
 
-            Task.Run(() => vm.RemoveCard(viewModel.SelectedItem));
+            Task.Run(() => vm.RemoveCard(_viewModel.SelectedItem));
             e.Handled = true;
         }
 
         private void Remove_Resource_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is not CardsViewModel vm) return;
-            if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
+            // if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
             if (sender is not Button button) return;
             if (button.DataContext is not ResourceBase resource) return;
 
