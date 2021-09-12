@@ -72,11 +72,11 @@ namespace MainApp
                 return;
 
             Task.Run(() => _viewModel.DeleteAsync(_viewModel.SelectedItem)).Wait();
-            Task.Run(RefreshDataAsync).Wait();
+            // Task.Run(RefreshDataAsync).Wait();
 
-            if (DataContext is not CardsViewModel vm) return;
+            //if (DataContext is not CardsViewModel vm) return;
 
-            Task.Run(() => vm.RemoveCardAsync(_viewModel.SelectedItem));
+            //Task.Run(() => vm.RemoveCardAsync(_viewModel.SelectedItem));
             e.Handled = true;
         }
 
