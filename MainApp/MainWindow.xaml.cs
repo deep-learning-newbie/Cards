@@ -45,9 +45,10 @@ namespace MainApp
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not CardsViewModel vm) return;
+            if (_viewModel.SelectedItem is not Card)
+                return;
 
-            vm.AddCard(null);
+            Task.Run(() => _viewModel.AddCard(_viewModel.SelectedItem.Id, new Card { Title = "Test" }));
             e.Handled = true;
         }
 
@@ -92,8 +93,9 @@ namespace MainApp
         }
         private void Add_Resource_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not CardsViewModel vm) return;
-            if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
+            // if (DataContext is not CardsViewModel vm) return;
+            // if (vm.SelectedItem/*Cards.CurrentItem*/ is not Card card) return;
+            if (_viewModel.SelectedItem == null) return;
 
             var dialog = new ResourceSelectorDialog();
             dialog.Owner = this;
@@ -113,7 +115,7 @@ namespace MainApp
                         break;
                 }
 
-                vm.AddResource(resource);
+                _viewModel.AddResource(resource);
             }
 
             e.Handled = true;

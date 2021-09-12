@@ -85,27 +85,14 @@ namespace MainApp.ViewModels
             await RefreshAsync().ConfigureAwait(false);
         }
 
-        public void AddCard(Card card) 
+        public async Task AddCard(int parentCardId, Card card) 
         {
-            var title = $"Card #{_entities.Count}"; 
-            var card1 = new Card()
-            {
-                Id = _entities.Count,
-                InEditMode = true,
-                Title = title,
-                Childs = new List<Card>()
-            };
+            card = card ?? throw new ArgumentNullException(nameof(card));
 
-            _entities.Add(card1);
-            //App.Current.Dispatcher.Invoke(()=>
-            //{
-            //    _entities.Add(card1);
-            //});
-            //var uiContext = SynchronizationContext.Current;
-            //uiContext.Send(x => _entities.Add(card1), null);
+            var addCommand = new AddChildCardCommand();
+            await addCommand.ExecuteAsync(parentCardId, card.Title);
 
-            if (_view is not ListCollectionView view) return;
-            view.Refresh();
+            await RefreshAsync().ConfigureAwait(false);
         }
         public async Task RemoveCard(Card card) 
         {
@@ -119,14 +106,11 @@ namespace MainApp.ViewModels
 
         public void AddResource(ResourceBase resource) 
         {
-            //if (Cards.CurrentItem is not Card card) return;
             if (SelectedItem is not Card card) return;
             resource = resource ?? throw new ArgumentNullException(nameof(resource));
 
             if (_view is not ListCollectionView view) return;
-            //view.EditItem(card);
             card.Resources.Add(resource);
-            //view.CommitEdit();
             view.Refresh();
         }
 

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Configuration;
+using Queries.Helpers;
 
 namespace Queries
 {
@@ -13,10 +14,9 @@ namespace Queries
         private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["CardsDBConnectionString"].ConnectionString;
 
         const string GetCardsQuery = @"SELECT 
-	                                     C.Id AS CardID,
-	                                     C.[Name],
-                                         C.InEditMode,
-	                                     CR.ParentId,
+	                                     C.Id AS CardId,
+	                                     C.Title,
+                                         CR.ParentId,
 	                                     CR.ChildId
                                        FROM Cards C
 	                                     LEFT JOIN CardsRelationship CR ON C.Id = CR.ChildId
@@ -46,8 +46,7 @@ namespace Queries
         private class CardsRelationship
         {
             public int CardId { get; set; }
-            public string Name { get; set; }
-            public bool IsReadOnly { get; set; }
+            public string Title { get; set; }
             public int? ParentId { get; set; }
             public int? ChildId { get; set; }
         }
@@ -83,7 +82,7 @@ namespace Queries
                     // Create parent card
                     if (item.ParentId == null)
                     {
-                        var parentCard = new Card { Id = item.CardId, Title = item.Name, Childs = new List<Card>() };
+                        var parentCard = new Card { Id = item.CardId, Title = item.Title, Childs = new List<Card>() };
                         result.Add(parentCard);
 
                         // Work with resources
@@ -109,13 +108,20 @@ namespace Queries
                     else
                     {
                         // Add child card
-                        var parentCard = result.Single(x => x.Id == item.ParentId);
+                        // var parentCard = result.Single(x => x.Id == item.ParentId);
+
+                        var parentCard = CardFindHelper.Find(result, item.ParentId);
+                        if (parentCard == null)
+                            continue;
+
                         var childCard = new Card
                         {
                             Id = item.CardId,
-                            Title = item.Name,
-                            InEditMode = !item.IsReadOnly // TODO: What for we use this property?
+                            Title = item.Title,
                         };
+                        if (parentCard.Childs == null)
+                            parentCard.Childs = new List<Card>();
+
                         parentCard.Childs.Add(childCard);
 
                         // Work with resources

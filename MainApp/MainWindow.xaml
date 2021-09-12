@@ -73,30 +73,7 @@
                         <Image Width="16" Source="/Resources/Images/Add_16x.png" />
                     </Button>
                 </Grid>
-
                 <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" BorderThickness="0" Margin="5"/>
-                
-                <!--<CheckBox x:Name="chkIsReadOnly" Grid.Row="1" IsChecked="{Binding IsReadOnly, Mode=OneWay}" Height="20"
-                              Content="{Binding Name}"
-                              IsHitTestVisible="False"
-                              Focusable="False">
-                    <CheckBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Add"  Click="MenuItem_Add"></MenuItem>
-                            <MenuItem Header="Edit" Click="MenuItem_Edit"></MenuItem>
-                            <MenuItem Header="Delete" Click="MenuItem_Delete"></MenuItem>
-                        </ContextMenu>
-                    </CheckBox.ContextMenu>
-                    <CheckBox.Style>
-                        <Style TargetType="CheckBox">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding InEditMode}" Value="True">
-                                    <Setter Property="Background" Value="Gray"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </CheckBox.Style>
-                </CheckBox>-->
             </Grid>
         </HierarchicalDataTemplate>
 

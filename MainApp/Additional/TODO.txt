@@ -2,5 +2,4 @@
 - Rework Resource model in order to have resource id and work with it in command instead of index
 - CardsQuery line 55
 - Need to get data from DB already
-- remove field IsReadOnly from DB
-- decide what to do with windows interactivity what Vova told
+- decide what to do with windows interactivity
