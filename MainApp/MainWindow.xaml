@@ -29,7 +29,7 @@
         </Style>
 
         <HierarchicalDataTemplate x:Key="CardItemTemplate" DataType="{x:Type model:Card}" ItemsSource="{Binding Childs}">
-            <Grid>
+            <Grid MinWidth="300" Margin="0,3,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -52,7 +52,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
-                <Grid Grid.Row="0" Tag="{Binding ElementName=view, Path=DataContext}">
+                <Grid Grid.Row="0" Tag="{Binding ElementName=view, Path=DataContext}"  Margin="3,3,3,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -103,7 +103,7 @@
 
                     <TextBox x:Name="textBox" Text="{Binding Title, Mode=TwoWay}" Margin="3" Background="Transparent"
                              VerticalAlignment="Center"  Visibility="Collapsed"/>
-                    <TextBlock x:Name="textBlock"  Text="{Binding Title}" Background="Transparent"
+                    <TextBlock x:Name="textBlock"  Text="{Binding Title}"  Margin="3" Background="Transparent"
                                VerticalAlignment="Center" Visibility="Visible" />
 
                     <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" 
@@ -127,7 +127,7 @@
                 </Grid>
                 <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" SelectedItem="{Binding ElementName=treeViewCards, Path=DataContext.SelectedResource, Mode=TwoWay}"
                           ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" 
-                          BorderThickness="0" Margin="5"/>
+                          BorderThickness="0" Margin="5" MinHeight="50"/>
             </Grid>
         </HierarchicalDataTemplate>
 
@@ -145,6 +145,11 @@
                 <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedCard, Mode=TwoWay}" />
             </i:Interaction.Behaviors>
             <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+
                 <DataTemplate x:Key="ImageResourceItemTemplate" DataType="{x:Type model:ImageResource}">
                     <GroupBox Grid.Row="1"  MinWidth="300">
                         <GroupBox.Header>
