@@ -44,7 +44,7 @@ namespace MainApp.Behaviours
             if (sender is not TreeView treeView) return;
             if (treeView.DataContext is not CardsViewModel viewModel) return;
 
-            viewModel.SelectedItem = SelectedItem;
+            viewModel.SelectedCard = SelectedItem;
         }
     }
 }

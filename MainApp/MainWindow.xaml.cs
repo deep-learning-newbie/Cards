@@ -18,49 +18,13 @@ namespace MainApp
         {
             InitializeComponent();
 
-            InitViewModel();
-            this.DataContext = _viewModel;
-        }
-
-        private void InitViewModel()
-        {
-            var cards = new List<Card>();
             _viewModel = new CardsViewModel();
-
-            Dispatcher.Invoke(async () => await _viewModel.RefreshAsync().ConfigureAwait(false));
+            DataContext = _viewModel;
         }
 
-        private void MenuItem_Add(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.SelectedItem is not Card)
-                return;
-
-            Task.Run(() => _viewModel.AddCardAsync(_viewModel.SelectedItem.Id, new Card { Title = "Test" }));
-            e.Handled = true;
-        }
-
-        private void MenuItem_Delete(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.SelectedItem == null)
-                return;
-
-            Task.Run(() => _viewModel.DeleteAsync(_viewModel.SelectedItem)).Wait();
-            e.Handled = true;
-        }
-
-        private void Remove_Resource_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is not CardsViewModel vm) return;
-            if (sender is not Button button) return;
-            if (button.DataContext is not ResourceBase resource) return;
-
-            Task.Run(() => vm.RemoveResourceAsync(resource)).Wait();
-
-            e.Handled = true;
-        }
         private void Add_Resource_Click(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.SelectedItem == null) return;
+            if (_viewModel.SelectedCard == null) return;
 
             var dialog = new ResourceSelectorDialog();
             dialog.Owner = this;
@@ -80,17 +44,24 @@ namespace MainApp
                         break;
                 }
 
-                Task.Run(() => _viewModel.AddResourceAsync(resource)).ConfigureAwait(false);
+                Task.Run(() =>
+                {
+                    if (_viewModel.AddResourceCommand.CanExecute(resource))
+                        _viewModel.AddResourceCommand.Execute(resource);
+
+                }).ConfigureAwait(false);
             }
 
             e.Handled = true;
         }
-        private void OnEdditUnchecked(object sender, RoutedEventArgs e)
+
+        private void Grid_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is not CheckBox checkBox) return;
-            if (checkBox.DataContext is not Card card) return;
+            if (e.OriginalSource is not FrameworkElement element) return;
+            if (element.DataContext is not Card card) return;
 
-
+            _viewModel.SelectedCard = card;
+            
         }
     }
 }

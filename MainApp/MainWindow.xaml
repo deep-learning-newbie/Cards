@@ -14,10 +14,12 @@
         Title="MainWindow" Height="450" Width="800"
         DataContext="CardsViewModel"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:CardsViewModel}"
-        >
+        x:Name="view">
+
     <Window.Resources>
         <local:ResourceTemplateSelector x:Key="ResourceTemplateSelector"/>
         <converters:ByteToImageConverter x:Key="byteToImageConverter" />
+
         <Style x:Key="AddResourceButtonStyle" TargetType="Button">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="True">
@@ -27,7 +29,7 @@
         </Style>
 
         <HierarchicalDataTemplate x:Key="CardItemTemplate" DataType="{x:Type model:Card}" ItemsSource="{Binding Childs}">
-            <Grid >
+            <Grid PreviewMouseUp="Grid_PreviewMouseUp">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -45,16 +47,16 @@
                     </Style>
                 </Grid.Style>
 
-                <Grid Grid.Row="0" >
+                <Grid Grid.Row="0" Tag="{Binding ElementName=view, Path=DataContext}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Add"  Click="MenuItem_Add"/>
-                            <MenuItem Header="Delete" Click="MenuItem_Delete"/>
+                        <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                            <MenuItem Header="Add" Command="{Binding Path=AddCardCommand}"/>
+                            <MenuItem Header="Delete" Command="{Binding Path=DeleteCardCommand}"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid.Style>
@@ -72,25 +74,39 @@
 
                     <TextBlock Text="{Binding Title}" Margin="3" VerticalAlignment="Center" Background="Transparent"/>
                     <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" 
-                              IsChecked="{Binding InEditMode, Mode=TwoWay}" Unchecked="OnEdditUnchecked"/>
+                              IsChecked="{Binding InEditMode, Mode=TwoWay}" 
+                              Command="{Binding ElementName=treeViewCards, Path=DataContext.SaveCardCommand}" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"/>
                     <Button Grid.Column="2" Background="Transparent" Style="{StaticResource AddResourceButtonStyle}"
                             BorderThickness="0" Margin="8, 0, 0, 0"
                             Click="Add_Resource_Click" IsHitTestVisible="{Binding InEditMode}">
                         <Image Width="16" Source="/Resources/Images/Add_16x.png" />
                     </Button>
                 </Grid>
-                <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" BorderThickness="0" Margin="5"/>
+                <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" SelectedItem="{Binding ElementName=treeViewCards, Path=DataContext.SelectedResource, Mode=TwoWay}"
+                          ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" 
+                          BorderThickness="0" Margin="5"/>
             </Grid>
         </HierarchicalDataTemplate>
 
     </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding RefreshCommand, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <TreeView x:Name="treeViewCards" ItemsSource="{Binding Cards}" ItemTemplate="{StaticResource CardItemTemplate}">
+            <i:Interaction.Behaviors>
+                <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedCard, Mode=TwoWay}" />
+            </i:Interaction.Behaviors>
             <TreeView.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGreen" />
+                <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGreen" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />-->
 
                 <DataTemplate x:Key="ImageResourceItemTemplate" DataType="{x:Type model:ImageResource}">
                     <GroupBox Grid.Row="1"  MinWidth="300">
@@ -103,7 +119,8 @@
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
                                 <Button Grid.Column="1" Content="[удалить]" Background="Transparent"  IsEnabled="{Binding ElementName=editButton, Path=IsChecked}"
                                         BorderThickness="0" VerticalAlignment="Center"
-                                        Click="Remove_Resource_Click"/>
+                                        Command="{Binding ElementName=treeViewCards, Path=DataContext.RemoveResourceCommand}"
+                                        CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}"/>
                             </Grid>
                         </GroupBox.Header>
                         <Grid>
@@ -128,7 +145,8 @@
                                 <TextBlock Grid.Column="0" Text="{Binding Index, StringFormat='Resource: {0}'}" VerticalAlignment="Center"/>
                                 <Button Grid.Column="1" Content="[удалить]" Background="Transparent" IsEnabled="{Binding ElementName=editButton, Path=IsChecked}"
                                         BorderThickness="0" VerticalAlignment="Center"
-                                        Click="Remove_Resource_Click"/>
+                                        Command="{Binding ElementName=treeViewCards, Path=DataContext.RemoveResourceCommand}"
+                                        CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}"/>
                             </Grid>
                         </GroupBox.Header>
                         <Grid>
@@ -144,9 +162,6 @@
                     </GroupBox>
                 </DataTemplate>
             </TreeView.Resources>
-            <i:Interaction.Behaviors>
-                <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
-            </i:Interaction.Behaviors>
         </TreeView>
     </Grid>
 </Window>

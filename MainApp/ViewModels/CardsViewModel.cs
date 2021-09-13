@@ -5,88 +5,113 @@ using Commands;
 using System.Threading.Tasks;
 using System;
 using Queries;
+using MainApp.Behaviours;
+using System.Windows.Input;
 
 namespace MainApp.ViewModels
 {
     public class CardsViewModel : ViewModelBase
     {
         #region attributes
-        private Card _seletcedItem;
+        private Card _seletcedCard;
         private ICollectionView _view;
+        private ResourceBase _selectedResource;
         #endregion
 
-        public Card SelectedItem
+        public CardsViewModel()
         {
-            get => _seletcedItem; set
+            RefreshCommand = new AsyncRelayCommand(RefreshAsync, (x) => true);
+            SaveCardCommand = new AsyncRelayCommand(SaveCardAsync, (x) => true);
+            AddCardCommand = new AsyncRelayCommand(AddCardAsync, (x) => true);
+            RemoveCardCommand = new AsyncRelayCommand(RemoveCardAsync, (x) => true);
+            AddResourceCommand = new AsyncRelayCommand(AddResourceAsync, (x) => true);
+            RemoveResourceCommand = new AsyncRelayCommand(RemoveResourceAsync, (x) => true);
+        }
+
+        #region properties
+        public Card SelectedCard
+        {
+            get => _seletcedCard; set
             {
-                if (_seletcedItem != null)
-                    _seletcedItem.IsSelected = false;
-                _seletcedItem = value;
-                if (_seletcedItem != null)
-                    _seletcedItem.IsSelected = true;
+                if (_seletcedCard != null)
+                    _seletcedCard.IsSelected = false;
+                _seletcedCard = value;
+                if (_seletcedCard != null)
+                    _seletcedCard.IsSelected = true;
 
                 OnPropertyChanged();
             }
         }
+        public ResourceBase SelectedResource { get => _selectedResource; set { _selectedResource = value; OnPropertyChanged(); } }
         public ICollectionView Cards { get => _view; set { _view = value; OnPropertyChanged(); } }
+        #endregion
 
-        public async Task DeleteAsync(Card card)
-        {
-            card = card ?? throw new ArgumentNullException(nameof(card));
-
-            var deleteCommand = new DeleteCardCommand();
-            await deleteCommand.ExecuteAsync(card.Id);
-
-            await RefreshAsync().ConfigureAwait(false);
-        }
-
-        public async Task AddCardAsync(int parentCardId, Card card) 
-        {
-            card = card ?? throw new ArgumentNullException(nameof(card));
-
-            var addCommand = new AddChildCardCommand();
-            await addCommand.ExecuteAsync(parentCardId, card.Title);
-
-            await RefreshAsync().ConfigureAwait(false);
-        }
-
-        public async Task RemoveCardAsync(Card card) 
-        {
-            if (Cards.CurrentItem is not Card) return;
-
-            var deleteCommand = new DeleteCardCommand();
-            await deleteCommand.ExecuteAsync(card.Id);
-
-            await RefreshAsync().ConfigureAwait(false);
-        }
-
-        public async Task AddResourceAsync(ResourceBase resource) 
-        {
-            if (SelectedItem is not Card card) return;
-            resource = resource ?? throw new ArgumentNullException(nameof(resource));
-
-            var addResourceCommand = new AddCardResourceCommand();
-            await addResourceCommand.ExecuteAsync(card.Id, resource.ResourceType, "Item 1", "Item 2", "TEST BODY");
-
-            await RefreshAsync().ConfigureAwait(false);
-        }
-
-        public async Task RemoveResourceAsync(ResourceBase resource)
-        {
-            resource = resource ?? throw new ArgumentNullException(nameof(resource));
-
-            var deleteCardResourceCommand = new DeleteCardResourceCommand();
-            await deleteCardResourceCommand.ExecuteAsync(resource.Id);
-
-            await RefreshAsync().ConfigureAwait(false);
-        }
-
-        public async Task RefreshAsync()
+        #region commands
+        public ICommand RefreshCommand { get; }
+        public async Task RefreshAsync(object param)
         {
             var cardsQuery = new CardsQuery();
 
             var cards = await cardsQuery.ExecuteAsync();
             Cards = CollectionViewSource.GetDefaultView(cards);
         }
+
+        public ICommand SaveCardCommand { get; }
+        public async Task SaveCardAsync(object param)
+        {
+        }
+
+        public ICommand AddCardCommand { get; }
+        public async Task AddCardAsync(object param)
+        {
+            if (Cards.CurrentItem is not Card card) return;
+
+            //TODO:
+            var count = 0;
+            var addCommand = new AddChildCardCommand();
+            await addCommand.ExecuteAsync(card.Id, $"Card {count}");
+
+            if (RefreshCommand.CanExecute(null))
+                RefreshCommand.Execute(null);
+        }
+
+        public ICommand RemoveCardCommand { get; }
+        public async Task RemoveCardAsync(object param)
+        {
+            if (Cards.CurrentItem is not Card card) return;
+
+            var deleteCommand = new DeleteCardCommand();
+            await deleteCommand.ExecuteAsync(card.Id);
+
+            if (RefreshCommand.CanExecute(null))
+                RefreshCommand.Execute(null);
+        }
+
+        public ICommand AddResourceCommand { get; }
+        public async Task AddResourceAsync(object param)
+        {
+            if (param is not ResourceBase resource) throw new ArgumentNullException(nameof(resource));
+            if (SelectedCard is not Card card) return;
+
+            var addResourceCommand = new AddCardResourceCommand();
+            await addResourceCommand.ExecuteAsync(card.Id, resource.ResourceType, "Item 1", "Item 2", "TEST BODY");
+
+            if (RefreshCommand.CanExecute(null))
+                RefreshCommand.Execute(null);
+        }
+
+        public ICommand RemoveResourceCommand { get; }
+        public async Task RemoveResourceAsync(object param)
+        {
+            if (param is not ResourceBase resource) throw new ArgumentNullException(nameof(param));
+
+            var deleteCardResourceCommand = new DeleteCardResourceCommand();
+            await deleteCardResourceCommand.ExecuteAsync(resource.Id);
+
+            if (RefreshCommand.CanExecute(null))
+                RefreshCommand.Execute(null);
+        }
+
+        #endregion
     }
 }
