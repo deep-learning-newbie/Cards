@@ -52,7 +52,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
-                
                 <Grid Grid.Row="0" Tag="{Binding ElementName=view, Path=DataContext}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -77,12 +76,49 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="EditableState">
+                            <VisualState x:Name="ReadOnly">
+                                <Storyboard>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBox" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                                    </ObjectAnimationUsingKeyFrames>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}" />
+                                    </ObjectAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="Edit">
+                                <Storyboard>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBox" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}" />
+                                    </ObjectAnimationUsingKeyFrames>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                        <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                                    </ObjectAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
 
-                    <TextBlock Text="{Binding Title}" Margin="3" VerticalAlignment="Center" Background="Transparent"/>
+                    <TextBox x:Name="textBox" Text="{Binding Title}" Margin="3" Background="Transparent"
+                             VerticalAlignment="Center"  Visibility="Collapsed"/>
+                    <TextBlock x:Name="textBlock"  Text="{Binding Title}" Background="Transparent"
+                               VerticalAlignment="Center" Visibility="Visible" />
+
                     <CheckBox x:Name="editButton" Grid.Column="1" Content="Edit" VerticalAlignment="Center" 
                               IsChecked="{Binding InEditMode, Mode=TwoWay}" 
                               Command="{Binding ElementName=treeViewCards, Path=DataContext.SaveCardCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:GoToStateAction StateName="Edit" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="Unchecked">
+                                <i:GoToStateAction StateName="ReadOnly" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </CheckBox>
                     <Button Grid.Column="2" Background="Transparent" Style="{StaticResource AddResourceButtonStyle}"
                             BorderThickness="0" Margin="8, 0, 0, 0"
                             Click="Add_Resource_Click" IsHitTestVisible="{Binding InEditMode}">
