@@ -101,7 +101,7 @@
                         </VisualStateGroup>
                     </VisualStateManager.VisualStateGroups>
 
-                    <TextBox x:Name="textBox" Text="{Binding Title}" Margin="3" Background="Transparent"
+                    <TextBox x:Name="textBox" Text="{Binding Title, Mode=TwoWay}" Margin="3" Background="Transparent"
                              VerticalAlignment="Center"  Visibility="Collapsed"/>
                     <TextBlock x:Name="textBlock"  Text="{Binding Title}" Background="Transparent"
                                VerticalAlignment="Center" Visibility="Visible" />
