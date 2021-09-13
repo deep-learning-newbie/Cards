@@ -54,14 +54,5 @@ namespace MainApp
 
             e.Handled = true;
         }
-
-        private void Grid_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource is not FrameworkElement element) return;
-            if (element.DataContext is not Card card) return;
-
-            _viewModel.SelectedCard = card;
-            
-        }
     }
 }

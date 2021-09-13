@@ -7,6 +7,7 @@ using System;
 using Queries;
 using MainApp.Behaviours;
 using System.Windows.Input;
+using System.Windows;
 
 namespace MainApp.ViewModels
 {
@@ -26,6 +27,7 @@ namespace MainApp.ViewModels
             RemoveCardCommand = new AsyncRelayCommand(RemoveCardAsync, (x) => true);
             AddResourceCommand = new AsyncRelayCommand(AddResourceAsync, (x) => true);
             RemoveResourceCommand = new AsyncRelayCommand(RemoveResourceAsync, (x) => true);
+            PreviewMouseUpCommand = new AsyncRelayCommand(PreviewMouseUpAsync, (x) => true);
         }
 
         #region properties
@@ -112,6 +114,13 @@ namespace MainApp.ViewModels
                 RefreshCommand.Execute(null);
         }
 
+        public ICommand PreviewMouseUpCommand { get; }
+        public async Task PreviewMouseUpAsync(object param)
+        {
+            if (param is not Card card) return;
+
+            SelectedCard = card;
+        }
         #endregion
     }
 }

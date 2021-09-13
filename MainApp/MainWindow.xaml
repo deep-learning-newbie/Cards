@@ -29,7 +29,7 @@
         </Style>
 
         <HierarchicalDataTemplate x:Key="CardItemTemplate" DataType="{x:Type model:Card}" ItemsSource="{Binding Childs}">
-            <Grid PreviewMouseUp="Grid_PreviewMouseUp">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -46,7 +46,13 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseUp">
+                        <i:InvokeCommandAction Command="{Binding ElementName=view, Path=DataContext.PreviewMouseUpCommand, Mode=OneWay}" PassEventArgsToCommand="False" CommandParameter="{Binding .}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
+                
                 <Grid Grid.Row="0" Tag="{Binding ElementName=view, Path=DataContext}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
