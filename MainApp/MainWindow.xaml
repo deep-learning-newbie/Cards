@@ -127,7 +127,7 @@
                 </Grid>
                 <ListView Grid.Row="1"  ItemsSource="{Binding Resources}" SelectedItem="{Binding ElementName=treeViewCards, Path=DataContext.SelectedResource, Mode=TwoWay}"
                           ItemTemplateSelector="{StaticResource ResourceTemplateSelector}" 
-                          BorderThickness="0" Margin="5" MinHeight="50"/>
+                          BorderThickness="0" Margin="5" MinHeight="50" />
             </Grid>
         </HierarchicalDataTemplate>
 
@@ -151,7 +151,7 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
 
                 <DataTemplate x:Key="ImageResourceItemTemplate" DataType="{x:Type model:ImageResource}">
-                    <GroupBox Grid.Row="1"  MinWidth="300">
+                    <GroupBox Grid.Row="1"  MinWidth="500">
                         <GroupBox.Header>
                             <Grid >
                                 <Grid.ColumnDefinitions>
@@ -177,7 +177,7 @@
                     </GroupBox>
                 </DataTemplate>
                 <DataTemplate x:Key="TableResourceItemTemplate" DataType="{x:Type model:TableResource}">
-                    <GroupBox Grid.Row="1" MinWidth="300">
+                    <GroupBox Grid.Row="1" MinWidth="500">
                         <GroupBox.Header>
                             <Grid >
                                 <Grid.ColumnDefinitions>
