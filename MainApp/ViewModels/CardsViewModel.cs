@@ -7,7 +7,6 @@ using System;
 using Queries;
 using MainApp.Behaviours;
 using System.Windows.Input;
-using System.Windows;
 
 namespace MainApp.ViewModels
 {
@@ -61,17 +60,23 @@ namespace MainApp.ViewModels
         public ICommand SaveCardCommand { get; }
         public async Task SaveCardAsync(object param)
         {
+            var changesFinished = (bool)param;
+            if (!changesFinished && SelectedCard != null)
+            {
+                var updateResourceCommand = new UpdateCardResourceCommand();
+                await updateResourceCommand.ExecuteAsync(SelectedCard);
+            }
         }
 
         public ICommand AddCardCommand { get; }
         public async Task AddCardAsync(object param)
         {
-            if (Cards.CurrentItem is not Card card) return;
+            if (SelectedCard == null) return;
 
             //TODO:
             var count = 0;
             var addCommand = new AddChildCardCommand();
-            await addCommand.ExecuteAsync(card.Id, $"Card {count}");
+            await addCommand.ExecuteAsync(SelectedCard.Id, $"Card {count}");
 
             if (RefreshCommand.CanExecute(null))
                 RefreshCommand.Execute(null);
@@ -80,10 +85,10 @@ namespace MainApp.ViewModels
         public ICommand RemoveCardCommand { get; }
         public async Task RemoveCardAsync(object param)
         {
-            if (Cards.CurrentItem is not Card card) return;
+            if (SelectedCard == null) return;
 
             var deleteCommand = new DeleteCardCommand();
-            await deleteCommand.ExecuteAsync(card.Id);
+            await deleteCommand.ExecuteAsync(SelectedCard.Id);
 
             if (RefreshCommand.CanExecute(null))
                 RefreshCommand.Execute(null);

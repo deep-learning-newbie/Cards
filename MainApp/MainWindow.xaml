@@ -62,7 +62,7 @@
                     <Grid.ContextMenu>
                         <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                             <MenuItem Header="Add" Command="{Binding Path=AddCardCommand}"/>
-                            <MenuItem Header="Delete" Command="{Binding Path=DeleteCardCommand}"/>
+                            <MenuItem Header="Delete" Command="{Binding Path=RemoveCardCommand}"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid.Style>
@@ -109,11 +109,6 @@
                 <behaviors:BindableSelectedItemBehavior SelectedItem="{Binding SelectedCard, Mode=TwoWay}" />
             </i:Interaction.Behaviors>
             <TreeView.Resources>
-                <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGreen" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />-->
-
                 <DataTemplate x:Key="ImageResourceItemTemplate" DataType="{x:Type model:ImageResource}">
                     <GroupBox Grid.Row="1"  MinWidth="300">
                         <GroupBox.Header>
